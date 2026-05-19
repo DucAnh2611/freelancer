@@ -1,120 +1,91 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { PrivateRoute } from '@/components/private-route'
+import { RoleRoute } from '@/components/role-route'
+import { Toaster } from '@/components/ui/sonner'
+import { TooltipProvider } from '@/components/ui/tooltip'
+import { AuthProvider } from '@/contexts/auth-context'
+import LoginPage from '@/pages/auth/login'
+import RegisterPage from '@/pages/auth/register'
+import EmployeeDashboard from '@/pages/employee/dashboard'
+import HirerDashboard from '@/pages/hirer/dashboard'
+import EmployeesPage from '@/pages/hirer/employees'
+import ChatPage from '@/pages/shared/chat'
+import HomePage from '@/pages/shared/home'
+import JobDetailPage from '@/pages/shared/job-detail'
+import JobEditPage from '@/pages/shared/job-edit'
+import JobNewPage from '@/pages/shared/job-new'
+import JobsPage from '@/pages/shared/jobs'
+import OffDayNewPage from '@/pages/shared/off-day-new'
+import OffDaysPage from '@/pages/shared/off-days'
+import ProfilePage from '@/pages/shared/profile'
+import ReportNewPage from '@/pages/shared/report-new'
+import ReportsPage from '@/pages/shared/reports'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import AppLayout from './pages/layout'
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // Short stale window so data refreshes on navigation/focus without
+      // stampeding the server. Individual queries can override when they need
+      // to stay fresh (realtime-backed queries) or cache longer.
+      staleTime: 10_000,
+      gcTime: 5 * 60_000,
+      refetchOnWindowFocus: true,
+      refetchOnMount: 'always',
+      retry: 1,
+    },
+  },
+})
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <AuthProvider>
+          <TooltipProvider delay={200}>
+          <Routes>
+            <Route element={<AppLayout />}>
+              {/* Public routes */}
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
 
-      <div className="ticks"></div>
+              {/* Private routes */}
+              <Route element={<PrivateRoute />}>
+                <Route path="/" element={<HomePage />} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+                {/* Shared routes (both roles) */}
+                <Route path="/jobs" element={<JobsPage />} />
+                <Route path="/jobs/:id" element={<JobDetailPage />} />
+                <Route path="/chat/:transferId" element={<ChatPage />} />
+                <Route path="/reports" element={<ReportsPage />} />
+                <Route path="/off-days" element={<OffDaysPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+                {/* Hirer routes */}
+                <Route element={<RoleRoute allowedRole="hirer" />}>
+                  <Route path="/hirer" element={<HirerDashboard />} />
+                  <Route path="/employees" element={<EmployeesPage />} />
+                  <Route path="/jobs/new" element={<JobNewPage />} />
+                  <Route path="/jobs/:id/edit" element={<JobEditPage />} />
+                </Route>
+
+                {/* Employee routes */}
+                <Route element={<RoleRoute allowedRole="employee" />}>
+                  <Route path="/employee" element={<EmployeeDashboard />} />
+                  <Route path="/reports/new" element={<ReportNewPage />} />
+                  <Route path="/off-days/new" element={<OffDayNewPage />} />
+                </Route>
+              </Route>
+
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Route>
+          </Routes>
+          <Toaster />
+          </TooltipProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
   )
 }
 

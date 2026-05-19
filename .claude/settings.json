@@ -7,7 +7,9 @@
       "Bash(cp temp-init/.gitignore .)",
       "Bash(cp temp-init/.eslintrc.cjs .)",
       "Bash(rm -rf temp-init)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run:*)"
     ]
   }
 }

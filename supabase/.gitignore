@@ -1,0 +1,10 @@
+# Supabase
+.branches
+.temp
+
+# dotenvx
+.env.keys
+.env.test
+.env.prod
+.env.local
+.env.*.local

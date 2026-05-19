@@ -1,0 +1,1 @@
+ALTER TABLE profiles ADD COLUMN settings JSONB NOT NULL DEFAULT '{}';

@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm uninstall:*)",
+      "Bash(grep -E \"^\\(shadcn|tailwindcss|tw-animate-css|@tailwindcss|class-variance|clsx|tailwind-merge|lucide-react\\)$\")",
+      "Bash(cross-env ENV_FILE=.env.dev node scripts/check-db.mjs)",
+      "Bash(ENV_FILE=.env.dev node scripts/check-db.mjs)",
+      "Bash(DEBUG_SQL=1 npm run sp:gen-types)",
+      "Bash(node -e ' *)",
+      "Bash(DEBUG_SQL=1 ENV_FILE=.env.dev node scripts/check-db.mjs)",
+      "Bash(ENV_FILE=.env.dev node scripts/check-fix.mjs)",
+      "Bash(npx shadcn@latest add input label textarea)",
+      "Bash(npx shadcn@latest add combobox)",
+      "Bash(npx shadcn@latest add form --overwrite=false --yes)",
+      "Bash(npx shadcn@latest add form --yes)",
+      "Bash(npx shadcn@latest add form --yes --overwrite)",
+      "WebSearch",
+      "WebFetch(domain:ui.shadcn.com)",
+      "Bash(npx shadcn@latest add field --yes)",
+      "Bash(npx shadcn@latest add alert-dialog --yes)",
+      "Bash(npx shadcn@latest add alert-dialog)",
+      "Bash(ENV_FILE=.env.dev node scripts/check-profiles.mjs)",
+      "Bash(ENV_FILE=.env.dev node scripts/test-auth-profiles.mjs)",
+      "Bash(ENV_FILE=.env.dev node scripts/test-auth-profiles.mjs ducanhmc24@gmail.com Ducanh@261102)",
+      "Bash(cross-env ENV_FILE=.env.dev node scripts/check-preview-fn.mjs)",
+      "Bash(ENV_FILE=.env.dev node scripts/check-preview-fn.mjs)",
+      "Bash(npx cross-env *)",
+      "Bash(npx eslint *)"
+    ]
+  }
+}
